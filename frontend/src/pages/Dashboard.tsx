@@ -3,7 +3,7 @@ import { useAuth } from '../context/AuthContext';
 import axios from 'axios';
 import { motion } from 'framer-motion';
 import { QRCodeSVG } from 'qrcode.react';
-import { Link2, ExternalLink, Calendar, MousePointer2, Download, Copy, Trash2 } from 'lucide-react';
+import { Link2, Calendar, MousePointer2, Download, Copy, Trash2 } from 'lucide-react';
 import toast from 'react-hot-toast';
 import { API_BASE_URL } from '../utils/constants';
 

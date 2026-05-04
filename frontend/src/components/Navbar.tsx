@@ -1,7 +1,7 @@
 import { Link, useNavigate } from 'react-router-dom';
 import { useAuth } from '../context/AuthContext';
 import { auth } from '../firebase';
-import { Link2, LogOut, User as UserIcon, LayoutDashboard } from 'lucide-react';
+import { Link2, LogOut, LayoutDashboard } from 'lucide-react';
 
 export default function Navbar() {
   const { user } = useAuth();

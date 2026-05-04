@@ -91,7 +91,6 @@ app.get('/api/links/:userId', async (req, res) => {
     const { userId } = req.params;
     const snapshot = await db.collection('links')
       .where('userId', '==', userId)
-      .orderBy('createdAt', 'desc')
       .get();
 
     const links = [];

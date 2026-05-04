@@ -3,6 +3,8 @@ import { useNavigate } from 'react-router-dom';
 import { signInWithPopup } from 'firebase/auth';
 import { auth, googleProvider } from '../firebase';
 import { motion } from 'framer-motion';
+import axios from 'axios';
+import { API_BASE_URL } from '../utils/constants';
 import toast from 'react-hot-toast';
 
 export default function Login() {
@@ -12,7 +14,17 @@ export default function Login() {
   const handleGoogleLogin = async () => {
     setLoading(true);
     try {
-      await signInWithPopup(auth, googleProvider);
+      const result = await signInWithPopup(auth, googleProvider);
+      const user = result.user;
+
+      // Sync user with backend
+      await axios.post(`${API_BASE_URL}/api/users`, {
+        userId: user.uid,
+        email: user.email,
+        name: user.displayName,
+        photoURL: user.photoURL
+      });
+
       toast.success('Welcome back!');
       navigate('/dashboard');
     } catch (error: any) {

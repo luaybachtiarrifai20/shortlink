@@ -3,6 +3,8 @@ import { motion, AnimatePresence } from 'framer-motion';
 import { X } from 'lucide-react';
 import { signInWithPopup } from 'firebase/auth';
 import { auth, googleProvider } from '../firebase';
+import axios from 'axios';
+import { API_BASE_URL } from '../utils/constants';
 import toast from 'react-hot-toast';
 
 interface LoginModalProps {
@@ -17,7 +19,17 @@ export default function LoginModal({ isOpen, onClose, onSuccess }: LoginModalPro
   const handleGoogleLogin = async () => {
     setLoading(true);
     try {
-      await signInWithPopup(auth, googleProvider);
+      const result = await signInWithPopup(auth, googleProvider);
+      const user = result.user;
+
+      // Sync user with backend
+      await axios.post(`${API_BASE_URL}/api/users`, {
+        userId: user.uid,
+        email: user.email,
+        name: user.displayName,
+        photoURL: user.photoURL
+      });
+
       toast.success('Welcome back!');
       onSuccess();
       onClose();

@@ -105,6 +105,41 @@ app.get('/api/links/:userId', async (req, res) => {
   }
 });
 
+// Save user on login
+app.post('/api/users', async (req, res) => {
+  try {
+    const { userId, email, name, photoURL } = req.body;
+
+    if (!userId || !email) {
+      return res.status(400).json({ error: 'User ID and Email are required' });
+    }
+
+    const userRef = db.collection('users').doc(userId);
+    const userDoc = await userRef.get();
+
+    if (!userDoc.exists) {
+      await userRef.set({
+        email,
+        name: name || '',
+        photoURL: photoURL || '',
+        createdAt: admin.firestore.FieldValue.serverTimestamp(),
+        lastLogin: admin.firestore.FieldValue.serverTimestamp(),
+      });
+      return res.status(201).json({ message: 'User created' });
+    } else {
+      await userRef.update({
+        lastLogin: admin.firestore.FieldValue.serverTimestamp(),
+        name: name || userDoc.data().name,
+        photoURL: photoURL || userDoc.data().photoURL,
+      });
+      return res.status(200).json({ message: 'User updated' });
+    }
+  } catch (error) {
+    console.error('Error saving user:', error);
+    res.status(500).json({ error: 'Internal server error' });
+  }
+});
+
 const PORT = process.env.PORT || 5001;
 app.listen(PORT, () => {
   console.log(`Server running on port ${PORT}`);

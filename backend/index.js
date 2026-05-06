@@ -67,9 +67,10 @@ app.post('/api/shorten', async (req, res) => {
 
     await db.collection('links').doc(shortCode).set(shortLinkData);
 
+    const baseUrl = process.env.BASE_FRONTEND_URL || `${req.protocol}://${req.get('host')}`;
     res.status(201).json({
       ...shortLinkData,
-      shortUrl: `${req.protocol}://${req.get('host')}/${shortCode}`
+      shortUrl: `${baseUrl}/${shortCode}`
     });
   } catch (error) {
     console.error('Error shortening URL:', error);
@@ -77,7 +78,31 @@ app.post('/api/shorten', async (req, res) => {
   }
 });
 
-// Redirect shortlink
+// Resolve shortlink (for frontend)
+app.get('/api/resolve/:shortCode', async (req, res) => {
+  try {
+    const { shortCode } = req.params;
+    const linkDoc = await db.collection('links').doc(shortCode).get();
+
+    if (!linkDoc.exists) {
+      return res.status(404).json({ error: 'Short link not found' });
+    }
+
+    const data = linkDoc.data();
+    
+    // Increment clicks asynchronously
+    db.collection('links').doc(shortCode).update({
+      clicks: admin.firestore.FieldValue.increment(1)
+    });
+
+    res.json({ originalUrl: data.originalUrl });
+  } catch (error) {
+    console.error('Error resolving:', error);
+    res.status(500).json({ error: 'Internal server error' });
+  }
+});
+
+// Redirect shortlink (fallback for direct backend access)
 app.get('/:shortCode', async (req, res) => {
   try {
     const { shortCode } = req.params;

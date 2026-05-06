@@ -3,6 +3,7 @@ import { Toaster } from 'react-hot-toast';
 import Home from './pages/Home';
 import Login from './pages/Login';
 import Dashboard from './pages/Dashboard';
+import RedirectPage from './pages/RedirectPage';
 import Navbar from './components/Navbar';
 import AuthProvider from './context/AuthContext';
 
@@ -16,6 +17,7 @@ function App() {
             <Route path="/" element={<Home />} />
             <Route path="/login" element={<Login />} />
             <Route path="/dashboard" element={<Dashboard />} />
+            <Route path="/:shortCode" element={<RedirectPage />} />
           </Routes>
           <Toaster position="bottom-right" />
         </div>

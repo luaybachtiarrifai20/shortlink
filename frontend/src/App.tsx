@@ -7,6 +7,7 @@ import RedirectPage from './pages/RedirectPage';
 import About from './pages/About';
 import PrivacyPolicy from './pages/PrivacyPolicy';
 import Blog from './pages/Blog';
+import BlogPost from './pages/BlogPost';
 import Navbar from './components/Navbar';
 import Footer from './components/Footer';
 import AuthProvider from './context/AuthContext';
@@ -25,6 +26,7 @@ function App() {
               <Route path="/about" element={<About />} />
               <Route path="/privacy-policy" element={<PrivacyPolicy />} />
               <Route path="/blog" element={<Blog />} />
+              <Route path="/blog/:slug" element={<BlogPost />} />
               <Route path="/:shortCode" element={<RedirectPage />} />
             </Routes>
           </div>

@@ -171,6 +171,7 @@ export default function Home() {
           {/* Ad Endorse (Side) */}
           <div className="lg:col-span-1">
             <h2 className="text-3xl font-extrabold mb-8 text-white text-center">
+              Space
             </h2>
             <div className="glass p-4 rounded-3xl flex items-center justify-center min-h-[400px] hover:border-primary-500/50 transition-colors">
               <img 

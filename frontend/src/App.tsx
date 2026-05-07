@@ -6,6 +6,7 @@ import Dashboard from './pages/Dashboard';
 import RedirectPage from './pages/RedirectPage';
 import About from './pages/About';
 import PrivacyPolicy from './pages/PrivacyPolicy';
+import Blog from './pages/Blog';
 import Navbar from './components/Navbar';
 import Footer from './components/Footer';
 import AuthProvider from './context/AuthContext';
@@ -14,16 +15,19 @@ function App() {
   return (
     <AuthProvider>
       <Router>
-        <div className="min-h-screen">
+        <div className="min-h-screen flex flex-col">
           <Navbar />
-          <Routes>
-            <Route path="/" element={<Home />} />
-            <Route path="/login" element={<Login />} />
-            <Route path="/dashboard" element={<Dashboard />} />
-            <Route path="/about" element={<About />} />
-            <Route path="/privacy-policy" element={<PrivacyPolicy />} />
-            <Route path="/:shortCode" element={<RedirectPage />} />
-          </Routes>
+          <div className="flex-grow">
+            <Routes>
+              <Route path="/" element={<Home />} />
+              <Route path="/login" element={<Login />} />
+              <Route path="/dashboard" element={<Dashboard />} />
+              <Route path="/about" element={<About />} />
+              <Route path="/privacy-policy" element={<PrivacyPolicy />} />
+              <Route path="/blog" element={<Blog />} />
+              <Route path="/:shortCode" element={<RedirectPage />} />
+            </Routes>
+          </div>
           <Footer />
           <Toaster position="bottom-right" />
         </div>

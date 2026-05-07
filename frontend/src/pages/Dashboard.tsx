@@ -41,6 +41,19 @@ export default function Dashboard() {
     toast.success('Copied to clipboard!');
   };
 
+  const handleDelete = async (shortCode: string) => {
+    if (!window.confirm('Are you sure you want to delete this link?')) return;
+    
+    try {
+      await axios.delete(`${API_BASE_URL}/api/links/${shortCode}`);
+      setLinks(links.filter(link => link.shortCode !== shortCode));
+      toast.success('Link deleted successfully!');
+    } catch (error) {
+      console.error('Error deleting link:', error);
+      toast.error('Failed to delete link.');
+    }
+  };
+
   const downloadQRCode = (id: string) => {
     const svg = document.getElementById(`qr-${id}`);
     if (!svg) return;
@@ -131,7 +144,10 @@ export default function Dashboard() {
                     >
                       <Copy className="w-4 h-4" />
                     </button>
-                    <button className="p-2 hover:bg-red-500/10 rounded-lg transition-colors text-slate-400 hover:text-red-400">
+                    <button 
+                      onClick={() => handleDelete(link.shortCode)}
+                      className="p-2 hover:bg-red-500/10 rounded-lg transition-colors text-slate-400 hover:text-red-400"
+                    >
                       <Trash2 className="w-4 h-4" />
                     </button>
                   </div>

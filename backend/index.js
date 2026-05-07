@@ -146,6 +146,18 @@ app.get('/api/links/:userId', async (req, res) => {
   }
 });
 
+// Delete shortlink
+app.delete('/api/links/:shortCode', async (req, res) => {
+  try {
+    const { shortCode } = req.params;
+    await db.collection('links').doc(shortCode).delete();
+    res.json({ message: 'Link deleted successfully' });
+  } catch (error) {
+    console.error('Error deleting link:', error);
+    res.status(500).json({ error: 'Internal server error' });
+  }
+});
+
 // Save user on login
 app.post('/api/users', async (req, res) => {
   try {

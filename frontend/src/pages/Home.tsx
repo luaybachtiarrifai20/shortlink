@@ -1,6 +1,6 @@
 import { useState } from 'react';
 import { motion } from 'framer-motion';
-import { Link2, ArrowRight, Zap, Shield, Globe } from 'lucide-react';
+import { Link2, ArrowRight, Zap, Shield, Globe, Wifi, Activity, Search, Key } from 'lucide-react';
 import axios from 'axios';
 import toast from 'react-hot-toast';
 import { useAuth } from '../context/AuthContext';
@@ -134,6 +134,76 @@ export default function Home() {
               <p className="text-slate-400 leading-relaxed">{feature.desc}</p>
             </motion.div>
           ))}
+        </div>
+        {/* Try Another Tools & Ad Section */}
+        <div className="mt-24 grid grid-cols-1 lg:grid-cols-3 gap-12">
+          {/* Tools Grid */}
+          <div className="lg:col-span-2">
+            <h2 className="text-3xl font-extrabold mb-8 text-white">
+              Try Another App / Tools<br />
+              <span className="text-xl text-slate-400 font-normal">(Click App Icon Below)</span>
+            </h2>
+            <div className="grid grid-cols-1 sm:grid-cols-2 gap-6">
+              {[
+                { icon: Wifi, title: 'Check Signal Speed', desc: 'Test your internet connection speed instantly.' },
+                { icon: Activity, title: 'Check Website Speed', desc: 'Analyze load times and performance of any site.' },
+                { icon: Search, title: 'SEO Checker', desc: 'Audit your website for search engine optimization.' },
+                { icon: Key, title: 'Password Generator', desc: 'Create strong, secure passwords with one click.' }
+              ].map((tool, i) => (
+                <motion.div
+                  key={i}
+                  initial={{ opacity: 0, y: 20 }}
+                  whileInView={{ opacity: 1, y: 0 }}
+                  viewport={{ once: true }}
+                  transition={{ delay: i * 0.1 }}
+                  className="glass p-6 rounded-3xl group hover:border-primary-500/50 transition-colors cursor-pointer"
+                >
+                  <div className="bg-primary-600/20 p-3 rounded-2xl w-fit mb-4 group-hover:scale-110 transition-transform">
+                    <tool.icon className="text-primary-400 w-6 h-6" />
+                  </div>
+                  <h3 className="text-lg font-bold mb-2">{tool.title}</h3>
+                  <p className="text-sm text-slate-400 leading-relaxed">{tool.desc}</p>
+                </motion.div>
+              ))}
+            </div>
+          </div>
+
+          {/* Ad Endorse (Side) */}
+          <div className="lg:col-span-1">
+            <h2 className="text-3xl font-extrabold mb-8 text-white text-center">
+            </h2>
+            <div className="glass p-4 rounded-3xl flex items-center justify-center min-h-[400px] hover:border-primary-500/50 transition-colors">
+              <img 
+                src="/images/poster1.png" 
+                alt="Ad Placeholder" 
+                className="w-full h-auto object-cover rounded-2xl opacity-80 hover:opacity-100 transition-opacity"
+              />
+            </div>
+          </div>
+        </div>
+
+        {/* Bottom Ads Section */}
+        <div className="mt-24 mb-12">
+          <h2 className="text-3xl font-extrabold mb-12 text-white text-center">
+            New Spaces
+          </h2>
+          <div className="grid grid-cols-1 sm:grid-cols-3 gap-6">
+            {[1, 2, 3].map((item) => (
+              <motion.div
+                key={item}
+                initial={{ opacity: 0, scale: 0.9 }}
+                whileInView={{ opacity: 1, scale: 1 }}
+                viewport={{ once: true }}
+                transition={{ delay: item * 0.1 }}
+                className="glass p-4 rounded-3xl flex flex-col items-center justify-center aspect-[3/4] hover:border-primary-500/50 transition-colors relative overflow-hidden"
+              >
+                {/* Fallback placeholder since user cancelled image generation */}
+                <div className="absolute inset-0 bg-gradient-to-br from-primary-900/40 to-transparent"></div>
+                <p className="text-slate-500 font-bold text-xl z-10 mb-2">Space Ad {item}</p>
+                <div className="w-16 h-1 bg-primary-500/30 rounded-full z-10"></div>
+              </motion.div>
+            ))}
+          </div>
         </div>
       </div>
 

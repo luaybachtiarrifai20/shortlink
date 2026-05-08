@@ -103,7 +103,7 @@ export default function Dashboard() {
 
     setCustomLoading(true);
     try {
-      const response = await axios.put(
+      await axios.put(
         `${API_BASE_URL}/api/links/${shortCode}/customize`,
         { newSlug: trimmed, userId: user.uid }
       );

@@ -28,6 +28,9 @@ export default function Navbar() {
 
         {/* Desktop Menu */}
         <div className="hidden md:flex items-center gap-6">
+          <Link to="/" className="text-sm font-medium text-slate-300 hover:text-white transition-colors">
+            Home
+          </Link>
           <Link to="/blog" className="text-sm font-medium text-slate-300 hover:text-white transition-colors">
             Blog
           </Link>
@@ -78,6 +81,13 @@ export default function Navbar() {
         {/* Mobile Menu Dropdown */}
         {isMobileMenuOpen && (
           <div className="md:hidden absolute top-full left-0 right-0 mt-2 mx-4 bg-slate-900 rounded-2xl p-4 flex flex-col gap-4 shadow-2xl shadow-black/50 border border-white/10 z-50">
+            <Link 
+              to="/" 
+              onClick={() => setIsMobileMenuOpen(false)}
+              className="text-sm font-medium text-slate-300 hover:text-white transition-colors px-2 py-1"
+            >
+              Home
+            </Link>
             <Link 
               to="/blog" 
               onClick={() => setIsMobileMenuOpen(false)}

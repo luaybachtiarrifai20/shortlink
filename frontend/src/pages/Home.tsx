@@ -42,18 +42,19 @@ export default function Home() {
   return (
     <div className="pt-24 pb-12 sm:pt-32 sm:pb-20 px-4">
       <div className="max-w-7xl mx-auto">
-        {/* Hero Section */}
+
+        {/* ── 1. Hero + Form ── */}
         <div className="text-center mb-12 sm:mb-20">
           <motion.div
             initial={{ opacity: 0, y: 20 }}
             animate={{ opacity: 1, y: 0 }}
             transition={{ duration: 0.5 }}
           >
-            <h1 className="text-4xl sm:text-6xl font-extrabold mb-6 bg-gradient-to-r from-white via-primary-200 to-white bg-clip-text text-transparent">
+            <h1 className="text-2xl sm:text-4xl md:text-6xl font-extrabold mb-4 sm:mb-6 bg-gradient-to-r from-white via-primary-200 to-white bg-clip-text text-transparent leading-tight">
               Shorten Your Links,<br />Expand Your Reach
             </h1>
-            <p className="text-slate-400 text-lg sm:text-xl max-w-2xl mx-auto mb-10">
-              Create short, powerful links and track their performance. 
+            <p className="text-slate-400 text-sm sm:text-lg md:text-xl max-w-2xl mx-auto mb-8 sm:mb-10 px-2">
+              Create short, powerful links and track their performance.
               Automatic QR code generation included for every link.
             </p>
           </motion.div>
@@ -113,42 +114,20 @@ export default function Home() {
           )}
         </div>
 
-        {/* Features Section */}
-        <div className="grid grid-cols-1 md:grid-cols-3 gap-6 sm:gap-8">
-          {[
-            { icon: Zap, title: 'Lightning Fast', desc: 'Links redirect in milliseconds worldwide.' },
-            { icon: Shield, title: 'Secure & Reliable', desc: 'Your data is safe with Firebase encrypted storage.' },
-            { icon: Globe, title: 'QR Codes Included', desc: 'Every link automatically gets a custom QR code.' }
-          ].map((feature, i) => (
-            <motion.div
-              key={i}
-              initial={{ opacity: 0, y: 20 }}
-              animate={{ opacity: 1, y: 0 }}
-              transition={{ delay: 0.4 + i * 0.1 }}
-              className="glass p-8 rounded-3xl group hover:border-primary-500/50 transition-colors"
-            >
-              <div className="bg-primary-600/20 p-3 rounded-2xl w-fit mb-6 group-hover:scale-110 transition-transform">
-                <feature.icon className="text-primary-400 w-8 h-8" />
-              </div>
-              <h3 className="text-xl font-bold mb-3">{feature.title}</h3>
-              <p className="text-slate-400 leading-relaxed">{feature.desc}</p>
-            </motion.div>
-          ))}
-        </div>
-        {/* Try Another Tools & Ad Section */}
-        <div className="mt-24 grid grid-cols-1 lg:grid-cols-3 gap-12">
+        {/* ── 2. Try Another App & Ad Space ── */}
+        <div className="mb-20 grid grid-cols-1 lg:grid-cols-3 gap-12">
           {/* Tools Grid */}
           <div className="lg:col-span-2">
-            <h2 className="text-3xl font-extrabold mb-8 text-white">
+            <h2 className="text-xl sm:text-3xl font-extrabold mb-6 sm:mb-8 text-white">
               Try Another App / Tools<br />
-              <span className="text-xl text-slate-400 font-normal">(Click App Icon Below)</span>
+              <span className="text-base sm:text-xl text-slate-400 font-normal">(Click App Icon Below)</span>
             </h2>
             <div className="grid grid-cols-1 sm:grid-cols-2 gap-6">
               {[
-                { icon: Wifi, title: 'Check Signal Speed', desc: 'Test your internet connection speed instantly.' },
+                { icon: Wifi,     title: 'Check Signal Speed',  desc: 'Test your internet connection speed instantly.' },
                 { icon: Activity, title: 'Check Website Speed', desc: 'Analyze load times and performance of any site.' },
-                { icon: Search, title: 'SEO Checker', desc: 'Audit your website for search engine optimization.' },
-                { icon: Key, title: 'Password Generator', desc: 'Create strong, secure passwords with one click.' }
+                { icon: Search,   title: 'SEO Checker',         desc: 'Audit your website for search engine optimization.' },
+                { icon: Key,      title: 'Password Generator',  desc: 'Create strong, secure passwords with one click.' }
               ].map((tool, i) => (
                 <motion.div
                   key={i}
@@ -161,33 +140,53 @@ export default function Home() {
                   <div className="bg-primary-600/20 p-3 rounded-2xl w-fit mb-4 group-hover:scale-110 transition-transform">
                     <tool.icon className="text-primary-400 w-6 h-6" />
                   </div>
-                  <h3 className="text-lg font-bold mb-2">{tool.title}</h3>
-                  <p className="text-sm text-slate-400 leading-relaxed">{tool.desc}</p>
+                  <h3 className="text-base sm:text-lg font-bold mb-2">{tool.title}</h3>
+                  <p className="text-xs sm:text-sm text-slate-400 leading-relaxed">{tool.desc}</p>
                 </motion.div>
               ))}
             </div>
           </div>
 
-          {/* Ad Endorse (Side) */}
+          {/* Ad / Space */}
           <div className="lg:col-span-1">
-            <h2 className="text-3xl font-extrabold mb-8 text-white text-center">
-              Space
-            </h2>
+            <h2 className="text-xl sm:text-3xl font-extrabold mb-6 sm:mb-8 text-white text-center">Space</h2>
             <div className="glass p-4 rounded-3xl flex items-center justify-center min-h-[400px] hover:border-primary-500/50 transition-colors">
-              <img 
-                src="/images/poster1.png" 
-                alt="Ad Placeholder" 
+              <img
+                src="/images/poster1.png"
+                alt="Ad Placeholder"
                 className="w-full h-auto object-cover rounded-2xl opacity-80 hover:opacity-100 transition-opacity"
               />
             </div>
           </div>
         </div>
 
-        {/* Bottom Ads Section */}
-        <div className="mt-24 mb-12">
-          <h2 className="text-3xl font-extrabold mb-12 text-white text-center">
-            New Spaces
-          </h2>
+        {/* ── 3. Lightning Fast · Secure · QR Codes ── */}
+        <div className="mb-20 grid grid-cols-1 md:grid-cols-3 gap-6 sm:gap-8">
+          {[
+            { icon: Zap,    title: 'Lightning Fast',    desc: 'Links redirect in milliseconds worldwide.' },
+            { icon: Shield, title: 'Secure & Reliable', desc: 'Your data is safe with Firebase encrypted storage.' },
+            { icon: Globe,  title: 'QR Codes Included', desc: 'Every link automatically gets a custom QR code.' }
+          ].map((feature, i) => (
+            <motion.div
+              key={i}
+              initial={{ opacity: 0, y: 20 }}
+              whileInView={{ opacity: 1, y: 0 }}
+              viewport={{ once: true }}
+              transition={{ delay: 0.1 + i * 0.1 }}
+              className="glass p-8 rounded-3xl group hover:border-primary-500/50 transition-colors"
+            >
+              <div className="bg-primary-600/20 p-3 rounded-2xl w-fit mb-6 group-hover:scale-110 transition-transform">
+                <feature.icon className="text-primary-400 w-8 h-8" />
+              </div>
+              <h3 className="text-lg sm:text-xl font-bold mb-3">{feature.title}</h3>
+              <p className="text-sm sm:text-base text-slate-400 leading-relaxed">{feature.desc}</p>
+            </motion.div>
+          ))}
+        </div>
+
+        {/* ── 4. New Spaces — Bottom Ads ── */}
+        <div className="mb-12">
+          <h2 className="text-xl sm:text-3xl font-extrabold mb-8 sm:mb-12 text-white text-center">New Spaces</h2>
           <div className="grid grid-cols-1 sm:grid-cols-3 gap-6">
             {[1, 2, 3].map((item) => (
               <motion.div
@@ -198,21 +197,20 @@ export default function Home() {
                 transition={{ delay: item * 0.1 }}
                 className="glass p-4 rounded-3xl flex flex-col items-center justify-center aspect-[3/4] hover:border-primary-500/50 transition-colors relative overflow-hidden"
               >
-                {/* Fallback placeholder since user cancelled image generation */}
-                <div className="absolute inset-0 bg-gradient-to-br from-primary-900/40 to-transparent"></div>
+                <div className="absolute inset-0 bg-gradient-to-br from-primary-900/40 to-transparent" />
                 <p className="text-slate-500 font-bold text-xl z-10 mb-2">Space Ad {item}</p>
-                <div className="w-16 h-1 bg-primary-500/30 rounded-full z-10"></div>
+                <div className="w-16 h-1 bg-primary-500/30 rounded-full z-10" />
               </motion.div>
             ))}
           </div>
         </div>
+
       </div>
 
-      <LoginModal 
-        isOpen={isLoginModalOpen} 
+      <LoginModal
+        isOpen={isLoginModalOpen}
         onClose={() => setIsLoginModalOpen(false)}
         onSuccess={() => {
-          // Trigger shortening after successful login if url is present
           if (url) {
             handleShorten({ preventDefault: () => {} } as React.FormEvent);
           }

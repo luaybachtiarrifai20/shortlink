@@ -2,8 +2,8 @@ export default function About() {
   return (
     <div className="pt-32 pb-20 px-4 min-h-screen">
       <div className="max-w-4xl mx-auto">
-        <h1 className="text-4xl font-bold mb-8">About Us</h1>
-        <div className="glass p-8 rounded-3xl space-y-6 text-slate-300 leading-relaxed">
+        <h1 className="text-2xl sm:text-4xl font-bold mb-6 sm:mb-8">About Us</h1>
+        <div className="glass p-5 sm:p-8 rounded-3xl space-y-4 sm:space-y-6 text-sm sm:text-base text-slate-300 leading-relaxed">
           <p>
             Welcome to ShortLink Pro, your ultimate solution for link management and optimization. 
             We built this platform with a simple mission: to help individuals and businesses take 
@@ -14,7 +14,7 @@ export default function About() {
             and a scroll past. We provide the tools to make your links clean, memorable, and 
             actionable, complete with analytics to help you understand your audience better.
           </p>
-          <h2 className="text-2xl font-bold text-white mt-8 mb-4">Our Values</h2>
+          <h2 className="text-lg sm:text-2xl font-bold text-white mt-6 sm:mt-8 mb-3 sm:mb-4">Our Values</h2>
           <ul className="list-disc pl-6 space-y-3">
             <li><strong>Speed:</strong> We ensure our redirection is lightning-fast globally.</li>
             <li><strong>Reliability:</strong> Built on top-tier cloud infrastructure to guarantee uptime.</li>

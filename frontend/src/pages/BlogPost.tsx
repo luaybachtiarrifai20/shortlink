@@ -9,7 +9,7 @@ export default function BlogPost() {
   if (!post) {
     return (
       <div className="pt-32 pb-20 px-4 min-h-[60vh] flex flex-col items-center justify-center text-center">
-        <h1 className="text-4xl font-bold mb-4">Post Not Found</h1>
+        <h1 className="text-2xl sm:text-4xl font-bold mb-4">Post Not Found</h1>
         <p className="text-slate-400 mb-8">The article you are looking for does not exist.</p>
         <Link to="/blog" className="btn-primary py-2 px-6">
           Back to Blog
@@ -29,18 +29,18 @@ export default function BlogPost() {
           Back to Blog
         </Link>
         
-        <article className="glass p-8 sm:p-12 rounded-3xl">
+        <article className="glass p-5 sm:p-8 md:p-12 rounded-3xl">
           <div className="flex items-center gap-4 text-sm text-primary-400 mb-6">
             <span>{post.date}</span>
             <span className="w-1 h-1 bg-primary-400 rounded-full"></span>
             <span className="font-medium">{post.category}</span>
           </div>
           
-          <h1 className="text-3xl sm:text-4xl md:text-5xl font-extrabold text-white mb-8 leading-tight">
+          <h1 className="text-2xl sm:text-3xl md:text-5xl font-extrabold text-white mb-6 sm:mb-8 leading-tight">
             {post.title}
           </h1>
           
-          <div className="space-y-6 text-slate-300 leading-relaxed text-lg">
+          <div className="space-y-4 sm:space-y-6 text-slate-300 leading-relaxed text-sm sm:text-base md:text-lg">
             {paragraphs.map((paragraph, index) => (
               <p key={index}>{paragraph.trim()}</p>
             ))}

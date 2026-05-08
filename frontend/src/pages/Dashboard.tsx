@@ -84,8 +84,8 @@ export default function Dashboard() {
     <div className="pt-28 pb-12 px-4 sm:px-6 lg:px-8 max-w-7xl mx-auto">
       <div className="flex flex-col sm:flex-row items-start sm:items-center justify-between gap-4 mb-10">
         <div>
-          <h1 className="text-3xl font-bold mb-2">My Links</h1>
-          <p className="text-slate-400">Manage and track your shortened URLs.</p>
+          <h1 className="text-xl sm:text-3xl font-bold mb-1 sm:mb-2">My Links</h1>
+          <p className="text-sm sm:text-base text-slate-400">Manage and track your shortened URLs.</p>
         </div>
         <div className="glass px-6 py-4 rounded-2xl flex items-center gap-4">
           <div className="text-center">

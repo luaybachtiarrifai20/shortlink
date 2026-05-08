@@ -280,7 +280,7 @@ export default function Dashboard() {
                           <input
                             autoFocus
                             value={customSlug}
-                            onChange={e => setCustomSlug(e.target.value.toLowerCase().replace(/[^a-z0-9_-]/g, ''))}
+                            onChange={e => setCustomSlug(e.target.value.replace(/[^a-zA-Z0-9_-]/g, ''))}
                             placeholder="namalink"
                             className="flex-1 bg-transparent text-white text-sm outline-none min-w-0"
                             onKeyDown={e => {

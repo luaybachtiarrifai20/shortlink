@@ -70,7 +70,7 @@ app.post('/api/shorten', async (req, res) => {
     const baseUrl = process.env.BASE_FRONTEND_URL || `${req.protocol}://${req.get('host')}`;
     res.status(201).json({
       ...shortLinkData,
-      shortUrl: `${baseUrl}/alto/${shortCode}`
+      shortUrl: `${baseUrl}/${shortCode}`
     });
   } catch (error) {
     console.error('Error shortening URL:', error);

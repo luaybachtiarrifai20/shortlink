@@ -27,7 +27,7 @@ function App() {
               <Route path="/privacy-policy" element={<PrivacyPolicy />} />
               <Route path="/blog" element={<Blog />} />
               <Route path="/blog/:slug" element={<BlogPost />} />
-              <Route path="/:shortCode" element={<RedirectPage />} />
+              <Route path="/alto/:shortCode" element={<RedirectPage />} />
             </Routes>
           </div>
           <Footer />

@@ -117,7 +117,7 @@ export default function Dashboard() {
                 <div className="bg-white p-3 rounded-2xl">
                   <QRCodeSVG
                     id={`qr-${link.shortCode}`}
-                    value={`${API_BASE_URL}/${link.shortCode}`}
+                    value={`${API_BASE_URL}/alto/${link.shortCode}`}
                     size={120}
                     level="H"
                   />
@@ -135,11 +135,11 @@ export default function Dashboard() {
               <div className="flex-1 min-w-0">
                 <div className="flex items-start justify-between mb-4">
                   <div className="bg-primary-600/20 text-primary-400 px-3 py-1 rounded-lg text-sm font-bold">
-                    /{link.shortCode}
+                    /alto/{link.shortCode}
                   </div>
                   <div className="flex gap-2">
                     <button 
-                      onClick={() => copyToClipboard(`${API_BASE_URL}/${link.shortCode}`)}
+                      onClick={() => copyToClipboard(`${API_BASE_URL}/alto/${link.shortCode}`)}
                       className="p-2 hover:bg-white/10 rounded-lg transition-colors text-slate-400 hover:text-white"
                     >
                       <Copy className="w-4 h-4" />

@@ -158,6 +158,95 @@ app.delete('/api/links/:shortCode', async (req, res) => {
   }
 });
 
+// Customize shortlink slug
+app.put('/api/links/:shortCode/customize', async (req, res) => {
+  try {
+    const { shortCode } = req.params;
+    const { newSlug, userId } = req.body;
+
+    if (!newSlug || !userId) {
+      return res.status(400).json({ error: 'New slug and userId are required' });
+    }
+
+    // Validate slug: only letters, numbers, hyphens, underscores; 3-50 chars
+    const slugRegex = /^[a-zA-Z0-9_-]{3,50}$/;
+    if (!slugRegex.test(newSlug)) {
+      return res.status(400).json({
+        error: 'Slug hanya boleh huruf, angka, tanda hubung (-) atau underscore (_), dan 3–50 karakter.'
+      });
+    }
+
+    // Block reserved paths
+    const reserved = ['api', 'login', 'dashboard', 'blog', 'about', 'privacy-policy'];
+    if (reserved.includes(newSlug.toLowerCase())) {
+      return res.status(400).json({ error: 'Slug tersebut tidak diizinkan.' });
+    }
+
+    // Get current link
+    const currentDoc = await db.collection('links').doc(shortCode).get();
+    if (!currentDoc.exists) {
+      return res.status(404).json({ error: 'Link tidak ditemukan.' });
+    }
+    const currentData = currentDoc.data();
+
+    // Make sure the user owns this link
+    if (currentData.userId !== userId) {
+      return res.status(403).json({ error: 'Anda tidak memiliki akses ke link ini.' });
+    }
+
+    // If slug unchanged
+    if (newSlug === shortCode) {
+      return res.status(400).json({ error: 'Slug baru harus berbeda dari yang sekarang.' });
+    }
+
+    // Check slug collision
+    const existingDoc = await db.collection('links').doc(newSlug).get();
+    if (existingDoc.exists) {
+      return res.status(409).json({ error: 'Custom link ini sudah digunakan. Coba yang lain.' });
+    }
+
+    // Count user's custom links (excluding current link if it is already custom)
+    const customSnapshot = await db.collection('links')
+      .where('userId', '==', userId)
+      .where('isCustom', '==', true)
+      .get();
+
+    const isAlreadyCustom = currentData.isCustom === true;
+    const customCount = customSnapshot.size;
+
+    if (!isAlreadyCustom && customCount >= 3) {
+      return res.status(403).json({
+        error: 'Anda sudah mencapai batas 3 custom link. Hapus salah satu custom link terlebih dahulu.'
+      });
+    }
+
+    // Build new document data
+    const newLinkData = {
+      ...currentData,
+      shortCode: newSlug,
+      isCustom: true,
+      customizedAt: admin.firestore.FieldValue.serverTimestamp(),
+    };
+
+    // Write new doc & delete old doc atomically via batch
+    const batch = db.batch();
+    batch.set(db.collection('links').doc(newSlug), newLinkData);
+    batch.delete(db.collection('links').doc(shortCode));
+    await batch.commit();
+
+    const baseUrl = process.env.BASE_FRONTEND_URL || `${req.protocol}://${req.get('host')}`;
+    res.json({
+      ...newLinkData,
+      id: newSlug,
+      shortUrl: `${baseUrl}/${newSlug}`,
+      message: 'Custom link berhasil disimpan!'
+    });
+  } catch (error) {
+    console.error('Error customizing link:', error);
+    res.status(500).json({ error: 'Internal server error' });
+  }
+});
+
 // Save user on login
 app.post('/api/users', async (req, res) => {
   try {

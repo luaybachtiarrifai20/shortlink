@@ -1,18 +1,45 @@
-import { useState } from 'react';
-import { motion } from 'framer-motion';
-import { Link2, ArrowRight, Zap, Shield, Globe, Wifi, Activity, Search, Key } from 'lucide-react';
+import { useState, useEffect } from 'react';
+import { motion, AnimatePresence } from 'framer-motion';
+import { Link2, ArrowRight, Zap, Shield, Globe, Wifi, Activity, Search, Key, Pencil, Check, X } from 'lucide-react';
 import axios from 'axios';
 import toast from 'react-hot-toast';
 import { useAuth } from '../context/AuthContext';
-import { API_BASE_URL } from '../utils/constants';
+import { API_BASE_URL, FRONTEND_URL } from '../utils/constants';
 import LoginModal from '../components/LoginModal';
+import QuotaModal from '../components/QuotaModal';
 
 export default function Home() {
   const [url, setUrl] = useState('');
   const [loading, setLoading] = useState(false);
+  
+  // Generated link states
   const [shortUrl, setShortUrl] = useState('');
+  const [shortCode, setShortCode] = useState('');
+  
+  // Customization states
+  const [isEditing, setIsEditing] = useState(false);
+  const [customSlug, setCustomSlug] = useState('');
+  const [customLoading, setCustomLoading] = useState(false);
+  
+  // Quota states
+  const [customCount, setCustomCount] = useState(0);
+  const [isQuotaModalOpen, setIsQuotaModalOpen] = useState(false);
+  const MAX_CUSTOM = 3;
+  
   const [isLoginModalOpen, setIsLoginModalOpen] = useState(false);
   const { user } = useAuth();
+
+  // Fetch custom link count
+  useEffect(() => {
+    if (user) {
+      axios.get(`${API_BASE_URL}/api/links/${user.uid}`)
+        .then(res => {
+          const count = res.data.filter((l: any) => l.isCustom).length;
+          setCustomCount(count);
+        })
+        .catch(console.error);
+    }
+  }, [user, shortUrl]); // refetch when shortUrl changes to keep count updated
 
   const handleShorten = async (e: React.FormEvent) => {
     e.preventDefault();
@@ -31,11 +58,47 @@ export default function Home() {
         email: user?.email
       });
       setShortUrl(response.data.shortUrl);
+      setShortCode(response.data.shortCode);
+      setIsEditing(false); // Reset editing state
       toast.success('Link shortened successfully!');
     } catch (error) {
       toast.error('Failed to shorten link');
     } finally {
       setLoading(false);
+    }
+  };
+
+  const startEditing = () => {
+    if (customCount >= MAX_CUSTOM) {
+      setIsQuotaModalOpen(true);
+      return;
+    }
+    setIsEditing(true);
+    setCustomSlug(shortCode);
+  };
+
+  const handleCustomize = async () => {
+    if (!user) return;
+    const trimmed = customSlug.trim();
+    if (!trimmed) return;
+
+    setCustomLoading(true);
+    try {
+      await axios.put(
+        `${API_BASE_URL}/api/links/${shortCode}/customize`,
+        { newSlug: trimmed, userId: user.uid }
+      );
+
+      const newUrl = `${FRONTEND_URL}/${trimmed}`;
+      setShortUrl(newUrl);
+      setShortCode(trimmed);
+      setIsEditing(false);
+      toast.success('Custom link berhasil disimpan!');
+    } catch (error: any) {
+      const msg = error.response?.data?.error || 'Gagal menyimpan custom link.';
+      toast.error(msg);
+    } finally {
+      setCustomLoading(false);
     }
   };
 
@@ -91,25 +154,95 @@ export default function Home() {
             <motion.div
               initial={{ opacity: 0, scale: 0.9 }}
               animate={{ opacity: 1, scale: 1 }}
-              className="mt-8 glass p-6 rounded-2xl max-w-xl mx-auto border-primary-500/30"
+              className="mt-8 glass p-6 rounded-2xl max-w-xl mx-auto border-primary-500/30 overflow-hidden text-left"
             >
-              <p className="text-sm text-slate-400 mb-2">Your short link is ready!</p>
+              <div className="flex items-center justify-between mb-3">
+                <p className="text-sm text-slate-400">Your short link is ready!</p>
+                <div className="flex items-center gap-1">
+                  {!isEditing && (
+                    <button
+                      onClick={startEditing}
+                      title="Edit Custom Link"
+                      className="flex items-center gap-1.5 px-3 py-1.5 bg-yellow-400/10 hover:bg-yellow-400/20 text-yellow-400 rounded-lg text-xs font-medium transition-colors"
+                    >
+                      <Pencil className="w-3.5 h-3.5" />
+                      Custom
+                    </button>
+                  )}
+                </div>
+              </div>
+
               <div className="flex items-center gap-3">
                 <input
                   readOnly
                   value={shortUrl}
-                  className="flex-1 bg-white/5 border border-white/10 rounded-xl px-4 py-2 text-primary-400 font-medium"
+                  className="flex-1 bg-white/5 border border-white/10 rounded-xl px-4 py-3 text-primary-400 font-medium w-full"
                 />
                 <button
                   onClick={() => {
                     navigator.clipboard.writeText(shortUrl);
                     toast.success('Copied to clipboard!');
                   }}
-                  className="px-4 py-2 bg-white/10 hover:bg-white/20 rounded-xl transition-colors"
+                  className="px-6 py-3 bg-white/10 hover:bg-white/20 rounded-xl transition-colors font-medium shrink-0"
                 >
                   Copy
                 </button>
               </div>
+
+              {/* Inline Custom Editor */}
+              <AnimatePresence>
+                {isEditing && (
+                  <motion.div
+                    initial={{ opacity: 0, height: 0, marginTop: 0 }}
+                    animate={{ opacity: 1, height: 'auto', marginTop: 16 }}
+                    exit={{ opacity: 0, height: 0, marginTop: 0 }}
+                  >
+                    <div className="bg-yellow-400/5 border border-yellow-400/20 rounded-xl p-4">
+                      <p className="text-xs text-yellow-400/80 mb-3 font-medium">
+                        ✏️ Atur custom link Anda ({customCount}/{MAX_CUSTOM} terpakai)
+                      </p>
+                      <div className="flex flex-col sm:flex-row flex-wrap items-stretch sm:items-center gap-2 mb-2">
+                        <div className="flex-1 flex items-center gap-1 bg-white/5 rounded-lg px-3 py-2 border border-white/10 min-w-0">
+                          <span className="text-slate-500 text-sm shrink-0 truncate max-w-[150px] sm:max-w-none">
+                            {FRONTEND_URL.replace('https://', '').replace('http://', '')}/
+                          </span>
+                          <input
+                            autoFocus
+                            value={customSlug}
+                            onChange={e => setCustomSlug(e.target.value.replace(/[^a-zA-Z0-9_-]/g, ''))}
+                            placeholder="namalink"
+                            className="flex-1 bg-transparent text-white text-base outline-none min-w-0"
+                            onKeyDown={e => {
+                              if (e.key === 'Enter') handleCustomize();
+                              if (e.key === 'Escape') setIsEditing(false);
+                            }}
+                          />
+                        </div>
+                        <div className="flex gap-2 shrink-0">
+                          <button
+                            onClick={handleCustomize}
+                            disabled={customLoading || customSlug.length < 3}
+                            className="flex-1 sm:flex-none flex justify-center items-center gap-1.5 px-4 py-2.5 bg-yellow-400 hover:bg-yellow-300 text-black rounded-lg text-sm font-bold transition-colors disabled:opacity-50"
+                          >
+                            <Check className="w-4 h-4" />
+                            {customLoading ? 'Menyimpan...' : 'Simpan'}
+                          </button>
+                          <button
+                            onClick={() => setIsEditing(false)}
+                            className="flex-1 sm:flex-none flex justify-center items-center gap-1.5 px-4 py-2.5 bg-white/10 hover:bg-white/20 text-white rounded-lg text-sm font-medium transition-colors"
+                          >
+                            <X className="w-4 h-4" />
+                            Batal
+                          </button>
+                        </div>
+                      </div>
+                      <p className="text-xs text-slate-500">
+                        Hanya huruf, angka, - dan _. Minimal 3 karakter.
+                      </p>
+                    </div>
+                  </motion.div>
+                )}
+              </AnimatePresence>
             </motion.div>
           )}
         </div>
@@ -215,6 +348,12 @@ export default function Home() {
             handleShorten({ preventDefault: () => {} } as React.FormEvent);
           }
         }}
+      />
+
+      <QuotaModal 
+        isOpen={isQuotaModalOpen} 
+        onClose={() => setIsQuotaModalOpen(false)} 
+        maxCustom={MAX_CUSTOM} 
       />
     </div>
   );

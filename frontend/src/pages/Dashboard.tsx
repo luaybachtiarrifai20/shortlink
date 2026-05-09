@@ -6,6 +6,7 @@ import { QRCodeSVG } from 'qrcode.react';
 import { Link2, Calendar, MousePointer2, Download, Copy, Trash2, Pencil, Check, X, Star } from 'lucide-react';
 import toast from 'react-hot-toast';
 import { API_BASE_URL, FRONTEND_URL } from '../utils/constants';
+import QuotaModal from '../components/QuotaModal';
 
 interface LinkData {
   id: string;
@@ -25,6 +26,7 @@ export default function Dashboard() {
   const [editingId, setEditingId] = useState<string | null>(null);
   const [customSlug, setCustomSlug] = useState('');
   const [customLoading, setCustomLoading] = useState(false);
+  const [isQuotaModalOpen, setIsQuotaModalOpen] = useState(false);
 
   const customCount = links.filter(l => l.isCustom).length;
   const MAX_CUSTOM = 3;
@@ -84,7 +86,7 @@ export default function Dashboard() {
   const startEditing = (link: LinkData) => {
     // Check quota — if not already custom and quota full, block
     if (!link.isCustom && customCount >= MAX_CUSTOM) {
-      toast.error(`Batas ${MAX_CUSTOM} custom link tercapai. Hapus custom link lain terlebih dahulu.`);
+      setIsQuotaModalOpen(true);
       return;
     }
     setEditingId(link.shortCode);
@@ -273,8 +275,8 @@ export default function Dashboard() {
                         <p className="text-xs text-yellow-400/80 mb-2 font-medium">
                           ✏️ Atur custom link Anda ({customCount}/{MAX_CUSTOM} terpakai)
                         </p>
-                        <div className="flex items-center gap-1 bg-white/5 rounded-lg px-3 py-2 border border-white/10 mb-2">
-                          <span className="text-slate-500 text-xs shrink-0">
+                        <div className="flex items-center gap-1 bg-white/5 rounded-lg px-3 py-2 border border-white/10 mb-2 min-w-0">
+                          <span className="text-slate-500 text-xs shrink-0 truncate max-w-[150px] sm:max-w-none">
                             {FRONTEND_URL.replace('https://', '').replace('http://', '')}/
                           </span>
                           <input
@@ -350,6 +352,12 @@ export default function Dashboard() {
           <p className="text-slate-400">No links found. Start shortening links to see them here!</p>
         </div>
       )}
+
+      <QuotaModal 
+        isOpen={isQuotaModalOpen} 
+        onClose={() => setIsQuotaModalOpen(false)} 
+        maxCustom={MAX_CUSTOM} 
+      />
     </div>
   );
 }
